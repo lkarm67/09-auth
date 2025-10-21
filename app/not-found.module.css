@@ -1,0 +1,15 @@
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.link {
+  color: blue;
+  text-decoration: underline;
+}
