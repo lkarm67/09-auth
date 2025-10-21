@@ -4,6 +4,7 @@ import { useState } from "react";
 import css from "./Header.module.css";
 import Link from "next/link";
 import TagsMenu from "../TagsMenu/TagsMenu";
+import AuthNavigation from "@/components/AuthNavigation/AuthNavigation";
 
 const Header = () => {
   const [activeTag, setActiveTag] = useState("");
@@ -21,6 +22,7 @@ const Header = () => {
           <li>
             <TagsMenu activeTag={activeTag} setActiveTag={setActiveTag} />
           </li>
+          <AuthNavigation/>
         </ul>
       </nav>
     </header>
