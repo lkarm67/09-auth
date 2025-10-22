@@ -9,10 +9,7 @@ export const metadata: Metadata = {
   description: 'View and manage your personal profile, notes, and settings in NoteHub.',
   keywords: ['profile', 'user account', 'notes', 'NoteHub', 'settings'],
   authors: [{ name: 'NoteHub Team' }],
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
   openGraph: {
     title: 'User Profile | NoteHub',
     description: 'Manage your account, notes, and preferences in NoteHub.',
@@ -20,47 +17,39 @@ export const metadata: Metadata = {
     siteName: 'NoteHub',
     type: 'website',
     images: [
-      {
-        url: 'https://notehub.vercel.app/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'NoteHub Profile Page',
-      },
+      { url: 'https://notehub.vercel.app/og-image.jpg', width: 1200, height: 630, alt: 'NoteHub Profile Page' },
     ],
-    },
-  };
+  },
+};
 
 const ProfilePage = async () => {
   const user = await getMeServer();
 
   return (
     <main className={css.mainContent}>
-        <div className={css.profileCard}>
-            <div className={css.header}>
-                <h1 className={css.formTitle}>Profile Page</h1>
-                <Link href="" className={css.editProfileButton}>
-                    Edit Profile
-                </Link>
-            <div className={css.avatarWrapper}>
-                <Image
-                    src={user?.avatar || '/default-avatar.png'}
-                    alt="User Avatar"
-                    width={120}
-                    height={120}
-                    className={css.avatar}
-                />
-            </div>
-            </div>
-            <div className={css.profileInfo}>
-                <p>
-                    Username: your_username
-                </p>
-                <p>
-                    Email: your_email@example.com
-                </p>
-            </div>
+      <div className={css.profileCard}>
+        <div className={css.header}>
+          <h1 className={css.formTitle}>Profile Page</h1>
+          <Link href="/profile/edit" className={css.editProfileButton}>
+            Edit Profile
+          </Link>
+          <div className={css.avatarWrapper}>
+            <Image
+              src={user?.avatar || '/default-avatar.png'}
+              alt="User Avatar"
+              width={120}
+              height={120}
+              className={css.avatar}
+            />
+          </div>
         </div>
+        <div className={css.profileInfo}>
+          <p>Username: {user?.username || 'your_username'}</p>
+          <p>Email: {user?.email || 'your_email@example.com'}</p>
+        </div>
+      </div>
     </main>
   );
 };
+
 export default ProfilePage;
