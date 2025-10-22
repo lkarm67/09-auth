@@ -2,7 +2,7 @@
 
 import { useState, useEffect, ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { getMe } from '@/lib/api/serverApi';
+import { getMeClient } from '@/lib/api/clientApi';
 import Loader from '../Loader/Loader';
 import type { User } from '@/types/user';
 
@@ -23,7 +23,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const me = await getMe();
+        const me = await getMeClient();
         setUser(me);
 
         // Якщо авторизований і намагається зайти на auth route

@@ -58,7 +58,7 @@ export const checkSession = async (): Promise<{ authenticated: boolean }> => {
   return data;
 };
 
-export const getMe = async (): Promise<User> => {
+export const getMeClient = async (): Promise<User> => {
   const { data } = await api.get<User>('/users/me');
   return data;
 };

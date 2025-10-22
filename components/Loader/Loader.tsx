@@ -1,7 +1,7 @@
 // components/Loader/Loader.tsx
 'use client';
 
-import './Loader.css';
+import './Loader.module.css';
 
 export default function Loader() {
   return (

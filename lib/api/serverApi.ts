@@ -31,7 +31,7 @@ export const fetchNoteById = async (id: string): Promise<Note> => {
 // Користувач
 // ======================================
 
-export const getMe = async (): Promise<User> => {
+export const getMeServer = async (): Promise<User> => {
   const headers = getAuthHeaders();
   const { data } = await api.get<User>('/users/me', { headers });
   return data;
