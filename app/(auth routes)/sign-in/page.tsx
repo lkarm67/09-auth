@@ -1,10 +1,11 @@
 'use client';
-import css from '/SignUpPage.module.css';
+
+import css from './SignInPage.module.css';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { registerUser } from '@/lib/api/clientApi';
+import { loginUser } from '@/lib/api/clientApi';
 
-export default function SignUpPage() {
+export default function SignInPage() {
   const router = useRouter();
   const [error, setError] = useState('');
 
@@ -15,18 +16,18 @@ export default function SignUpPage() {
     const password = formData.get('password') as string;
 
     try {
-      await registerUser({ email, password });
+      await loginUser({ email, password });
       router.push('/profile');
-    } catch (err) {
-      console.error(err);
-      setError('Registration failed. Try again.');
+    } catch {
+      setError('Login failed. Try again.');
     }
   };
 
   return (
     <main className={css.mainContent}>
-      <h1 className={css.formTitle}>Sign up</h1>
       <form className={css.form} onSubmit={handleSubmit}>
+        <h1 className={css.formTitle}>Sign in</h1>
+
         <div className={css.formGroup}>
           <label htmlFor="email">Email</label>
           <input id="email" type="email" name="email" className={css.input} required />
@@ -39,15 +40,12 @@ export default function SignUpPage() {
 
         <div className={css.actions}>
           <button type="submit" className={css.submitButton}>
-            Register
+            Log in
           </button>
         </div>
 
-        {error && <p className={css.error}>{error}</p>}
+        <p className={css.error}>{error}</p>
       </form>
     </main>
   );
 }
-
-
-

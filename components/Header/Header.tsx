@@ -22,7 +22,14 @@ const Header = () => {
           <li>
             <TagsMenu activeTag={activeTag} setActiveTag={setActiveTag} />
           </li>
-          <AuthNavigation/>
+          <li className={css.navigationItem}>
+            <Link className={css.navigationLink} href="/profile">Profile</Link>
+          </li><li className={css.navigationItem}>
+            <Link className={css.navigationLink} href="/sign-in">Login</Link>
+          </li><li className={css.navigationItem}>
+            <Link className={css.navigationLink} href="/sign-up">Register</Link>
+          </li>
+          <AuthNavigation />
         </ul>
       </nav>
     </header>
