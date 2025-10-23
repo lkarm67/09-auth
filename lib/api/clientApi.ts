@@ -1,74 +1,54 @@
 'use client';
 
-import type { Note, CreateNoteParams } from "@/types/note";
-import api from "./api";
-import type { User } from "@/types/user";
+import css from './SignUpPage.module.css';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useState } from 'react';
+import { register as registerUser } from '@/lib/api/clientApi'; // 🔹 імпорт з правильним іменем
+import { useAuthStore } from '@/stores/authStore'; // 🔹 глобальне сховище автентифікації
 
-export interface FetchNotesParams {
-  search?: string;
-  page?: number;
-  perPage?: number;
-  tag?: string;
+export default function SignUpPage() {
+  const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser); // функція для оновлення глобального стану
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    try {
+      const user = await registerUser({ email, password }); // 🔹 отримуємо користувача
+      setUser(user); // 🔹 зберігаємо у глобальному стані
+      router.push('/profile');
+    } catch (err) {
+      console.error(err);
+      setError('Registration failed. Try again.');
+    }
+  };
+
+  return (
+    <main className={css.mainContent}>
+      <h1 className={css.formTitle}>Sign up</h1>
+      <form className={css.form} onSubmit={handleSubmit}>
+        <div className={css.formGroup}>
+          <label htmlFor="email">Email</label>
+          <input id="email" type="email" name="email" className={css.input} required />
+        </div>
+
+        <div className={css.formGroup}>
+          <label htmlFor="password">Password</label>
+          <input id="password" type="password" name="password" className={css.input} required />
+        </div>
+
+        <div className={css.actions}>
+          <button type="submit" className={css.submitButton}>
+            Register
+          </button>
+        </div>
+
+        {error && <p className={css.error}>{error}</p>}
+      </form>
+    </main>
+  );
 }
-
-export interface FetchNotesResponse {
-  notes: Note[];
-  totalPages: number;
-}
-
-export const fetchNotes = async (
-  params: FetchNotesParams
-): Promise<FetchNotesResponse> => {
-  const { data } = await api.get<FetchNotesResponse>("/notes", { params });
-  console.log("Fetching notes with params:", params);
-  return data;
-};
-
-export const fetchNoteById = async (id: string): Promise<Note> => {
-  const { data } = await api.get<Note>(`/notes/${id}`);
-  return data;
-};
-
-export const createNote = async (note: CreateNoteParams): Promise<Note> => {
-  const { data } = await api.post<Note>("/notes", note);
-  return data;
-};
-
-export const deleteNote = async (id: string): Promise<Note> => {
-  const { data } = await api.delete<Note>(`/notes/${id}`);
-  return data;
-};
-
-export const registerUser = async (userData: { email: string; password: string }): Promise<User> => {
-  const { data } = await api.post<User>('/auth/register', userData);
-  return data;
-};
-
-export const loginUser = async (credentials: { email: string; password: string }): Promise<User> => {
-  const { data } = await api.post<User>('/auth/login', credentials);
-  return data;
-};
-
-export const logoutUser = async (): Promise<void> => {
-  await api.post('/auth/logout');
-};
-
-export const checkSession = async (): Promise<{ authenticated: boolean }> => {
-  const { data } = await api.get<{ authenticated: boolean }>('/auth/check');
-  return data;
-};
-
-export const getMeClient = async (): Promise<User> => {
-  const { data } = await api.get<User>('/users/me');
-  return data;
-};
-
-export interface UpdateUserData {
-  name?: string;
-  email?: string;
-}
-
-export const updateMe = async (updateData: UpdateUserData): Promise<User> => {
-  const { data } = await api.patch<User>('/users/me', updateData);
-  return data;
-};

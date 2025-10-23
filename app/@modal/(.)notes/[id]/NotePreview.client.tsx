@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
-import { fetchNoteById } from "@/lib/api/clientApi";
+import { fetchNoteById } from "@/lib/api/serverApi";
 import { Modal } from "@/components/Modal/Modal";
 import css from "./NotePreview.module.css";
 
@@ -18,8 +18,37 @@ export default function NotePreview() {
 
   const handleClose = () => router.back();
 
-  if (isLoading) return null;
-  if (error || !note) return null;
+  if (isLoading) {
+    return (
+      <Modal onClose={handleClose}>
+        <div className={css.container}>
+          <p>Loading note...</p>
+        </div>
+      </Modal>
+    );
+  }
+
+  if (error) {
+    return (
+      <Modal onClose={handleClose}>
+        <div className={css.container}>
+          <p>Error loading note. Please try again.</p>
+          <button onClick={handleClose} className={css.backBtn}>← Back</button>
+        </div>
+      </Modal>
+    );
+  }
+
+  if (!note) {
+    return (
+      <Modal onClose={handleClose}>
+        <div className={css.container}>
+          <p>Note not found.</p>
+          <button onClick={handleClose} className={css.backBtn}>← Back</button>
+        </div>
+      </Modal>
+    );
+  }
 
   return (
     <Modal onClose={handleClose}>

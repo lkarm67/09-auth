@@ -1,4 +1,3 @@
-// lib/api/serverApi.ts
 import { cookies } from 'next/headers';
 import api from './api';
 import type { Note } from '@/types/note';
@@ -15,9 +14,9 @@ const getAuthHeaders = () => {
 // Нотатки
 // ======================================
 
-export const fetchNotes = async (): Promise<Note[]> => {
+export const fetchNotes = async (p0: { page: number; perPage: number; tag: string | undefined; }): Promise<Note[]> => {
   const headers = getAuthHeaders();
-  const { data } = await api.get<Note[]>('/notes', { headers });
+  const { data } = await api.get<Note[]>('/notes', { headers, params: p0 });
   return data;
 };
 
@@ -41,13 +40,11 @@ export const getMeServer = async (): Promise<User> => {
 // Перевірка сесії
 // ======================================
 
-export const checkServerSession = async (): Promise<{ authenticated: boolean }> => {
-  const cookieStore = await cookies();
-  const { data } = await api.get<{ authenticated: boolean }>('/auth/session', {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
+export const checkServerSession = async () => {
+  const cookieStore = cookies();
+  const response = await api.get<{ authenticated: boolean }>('/auth/session', {
+    headers: { Cookie: cookieStore.toString() },
   });
 
-  return data; // тепер тип співпадає з Promise<{ authenticated: boolean }>
+  return response; 
 };
