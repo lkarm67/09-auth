@@ -17,13 +17,19 @@ export async function middleware(request: NextRequest) {
   // Немає accessToken
   if (!accessToken) {
     if (refreshToken) {
-      const { authenticated, headers } = await checkServerSession();
+      const response = await checkServerSession();
+      const authenticated = response.data.authenticated;
+      const headers = response.headers;
 
       // якщо сервер повернув нові cookie — додаємо їх
       const res = NextResponse.next();
-      const setCookieHeader = headers?.get?.('set-cookie');
+      const setCookieHeader = headers['set-cookie'];
       if (setCookieHeader) {
-        res.headers.append('set-cookie', setCookieHeader);
+        if (Array.isArray(setCookieHeader)) {
+          setCookieHeader.forEach(cookie => res.headers.append('set-cookie', cookie));
+        } else {
+          res.headers.append('set-cookie', setCookieHeader);
+        }
       }
 
       if (authenticated) {
