@@ -26,9 +26,10 @@ export default function SignUpPage() {
 
   return (
     <main className={css.mainContent}>
-      <h1 className={css.formTitle}>Sign up</h1>
+      
       <form className={css.form} onSubmit={handleSubmit}>
         <div className={css.formGroup}>
+          <h1 className={css.formTitle}>Sign up</h1>
           <label htmlFor="email">Email</label>
           <input id="email" type="email" name="email" className={css.input} required />
         </div>
