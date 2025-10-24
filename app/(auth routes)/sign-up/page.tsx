@@ -3,7 +3,7 @@
 import css from './SignUpPage.module.css';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { registerUser } from '@/lib/api/clientApi';
+import { register } from '@/lib/api/clientApi';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function SignUpPage() {
     const password = formData.get('password') as string;
 
     try {
-      await registerUser({ email, password });
+      await register({ email, password });
       router.push('/profile');
     } catch (err) {
       console.error(err);
