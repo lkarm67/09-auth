@@ -3,7 +3,7 @@
 import css from './SignInPage.module.css';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import loginUser from '@/lib/api/clientApi';
+import { login } from '@/lib/api/clientApi';
 import { useAuthStore } from '@/lib/store/authStore';
 import type { User } from '@/types/user';
 
@@ -29,7 +29,7 @@ export default function SignInPage() {
     const password = formData.get('password') as string;
 
     try {
-      const user = await loginUser({ email, password }); // має повертати User
+      const user = await login({ email, password }); // має повертати User
       setUser(user); // ✅ без помилки "boolean → User"
       router.push('/profile');
     } catch (err) {

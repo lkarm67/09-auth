@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import type { User } from '@/types/user';
 import { useAuthStore } from '@/lib/store/authStore';
-import updateProfile from '@/lib/api/clientApi'; // 
+import { updateMe } from '@/lib/api/clientApi'; // 
 
 // Типобезпечний селектор-каст (щоб працювало з create<AuthStore>()((set)=>...))
 const useAuthStoreSelector = useAuthStore as unknown as <T>(
@@ -59,7 +59,7 @@ export default function EditProfilePage(): JSX.Element {
       };
 
       // Виклик API — припускаємо що updateProfile повертає оновлений User або { user } або boolean
-      const res = await updateProfile();
+      const res = await updateMe(payload);
 
       // Універсальна обробка відповіді:
       let updatedUser: User | null = null;
