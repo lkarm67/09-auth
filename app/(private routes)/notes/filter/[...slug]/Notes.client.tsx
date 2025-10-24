@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useDebouncedCallback } from "use-debounce";
-import { fetchNotes, type FetchNotesResponse } from "@/lib/api/clientApi";
+import { fetchNotes, type NotesHTTPResponse } from "@/lib/api/clientApi";
 import NoteList from "@/components/NoteList/NoteList";
 import { Pagination } from "@/components/Pagination/Pagination";
 import SearchBox from "@/components/SearchBox/SearchBox";
@@ -21,9 +21,9 @@ export default function NotesClient({ tag }: { tag: string | undefined }) {
     setSearchQuery(value.trim());
   }, 500);
 
-  const { data, isLoading, isError } = useQuery<FetchNotesResponse, Error>({
+  const { data, isLoading, isError } = useQuery<NotesHTTPResponse, Error>({
     queryKey: ["notes", searchQuery, page, tag],
-    queryFn: () => fetchNotes({ search: searchQuery || undefined, page, perPage: 12, tag }),
+    queryFn: () => fetchNotes(searchQuery || "", page, tag),
     placeholderData: keepPreviousData,
   });
 
