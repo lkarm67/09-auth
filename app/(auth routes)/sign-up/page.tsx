@@ -4,10 +4,11 @@ import css from './SignUpPage.module.css';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { register } from '@/lib/api/clientApi';
-
+import { useAuthStore } from '@/lib/store/authStore'; 
 export default function SignUpPage() {
   const router = useRouter();
   const [error, setError] = useState('');
+  const setUser = useAuthStore((state) => state.setUser); 
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,7 +17,8 @@ export default function SignUpPage() {
     const password = formData.get('password') as string;
 
     try {
-      await register({ email, password });
+      const user = await register({ email, password });
+      setUser(user);
       router.push('/profile');
     } catch (err) {
       console.error(err);
@@ -26,7 +28,6 @@ export default function SignUpPage() {
 
   return (
     <main className={css.mainContent}>
-      
       <form className={css.form} onSubmit={handleSubmit}>
         <div className={css.formGroup}>
           <h1 className={css.formTitle}>Sign up</h1>
